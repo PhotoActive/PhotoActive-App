@@ -9,10 +9,38 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  DeviceEventEmitter,
 } from 'react-native';
 
+import {
+  Magnetometer
+} from 'NativeModules';
+
 class PhotoActive extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {x: 0, y: 0, z: 0};
+
+    var app = this;
+
+    Magnetometer.setMagnetometerUpdateInterval(0.1); // in seconds
+    DeviceEventEmitter.addListener('MagnetometerData', function (data) {
+    /**
+    * data.magneticField.x
+    * data.magneticField.y
+    * data.magneticField.z
+    **/
+      app.setState ({
+        x: data.magneticField.x, 
+        y: data.magneticField.y,
+        z: data.magneticField.z
+      })
+    });
+    Magnetometer.startMagnetometerUpdates(); // you'll start getting AccelerationData events above
+    //Magnetometer.stopMagnetometerUpdates();
+
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -23,8 +51,7 @@ class PhotoActive extends Component {
           To get started, edit index.ios.js
         </Text>
         <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
+          {this.state.x},{this.state.y},{this.state.z}
         </Text>
       </View>
     );
