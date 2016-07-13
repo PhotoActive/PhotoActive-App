@@ -8,6 +8,7 @@
   "dependencies": {
     "react": "15.2.1",
     "react-native": "0.29.0",
+    "react-native-image-picker": "^0.20.2",
     "react-native-motion-manager": "0.0.6"
   }
 }
